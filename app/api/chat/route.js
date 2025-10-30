@@ -3,10 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    console.log(
-      "Gemini key loaded:",
-      process.env.GEMINI_API_KEY ? "✅ YES" : "❌ NO"
-    );
+    
 
     // ✅ Initialize Gemini SDK
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);

@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 
-const uri = "mongodb+srv://saipranayt314:saipranay12@cluster0.maeisbq.mongodb.net/portfolio?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri)
 
 export async function GET() {

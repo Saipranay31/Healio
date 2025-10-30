@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+"use client";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { PlayCircle, StopCircle } from "lucide-react";
@@ -23,7 +24,22 @@ export default function MentalActivities() {
   const [currentAudio, setCurrentAudio] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
-  const audioRef = useRef(new Audio());
+  const audioRef = useRef(null);
+
+  // ✅ Create Audio object only in browser
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      audioRef.current = new Audio();
+    }
+
+    // Cleanup when component unmounts
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   // Relaxing Sounds Data
   const relaxingSounds = [
@@ -52,22 +68,24 @@ export default function MentalActivities() {
     {
       label: "Tetris",
       image: "/images/tetris.png",
-      link: "/activities/mental/games/tetris", // Fixed route
+      link: "/activities/mental/games/tetris",
     },
     {
       label: "Snake Game",
       image: "/images/snakegame.png",
-      link: "/activities/mental/games/snake", // Fixed route
+      link: "/activities/mental/games/snake",
     },
     {
       label: "Minesweeper",
       image: "/images/mine.png",
-      link: "/activities/mental/games/minesweeper", // Fixed route
+      link: "/activities/mental/games/minesweeper",
     },
   ];
 
   // Play or stop audio
   const toggleAudio = (audioSrc) => {
+    if (!audioRef.current) return;
+
     if (isPlaying && audioSrc === currentAudio) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -89,9 +107,11 @@ export default function MentalActivities() {
 
   // Stop audio when dialog closes
   const stopAudio = () => {
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-    setIsPlaying(false);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+    }
   };
 
   return (
@@ -117,8 +137,12 @@ export default function MentalActivities() {
 
           {/* Relaxing Sounds Section */}
           <Card className="p-6 bg-white rounded-lg shadow-lg mb-6">
-            <h2 className="text-2xl font-medium text-[#314328] mb-4">Relaxing Sounds</h2>
-            <p className="text-gray-600 mb-4">"Immerse Yourself In Peaceful Sounds"</p>
+            <h2 className="text-2xl font-medium text-[#314328] mb-4">
+              Relaxing Sounds
+            </h2>
+            <p className="text-gray-600 mb-4">
+              "Immerse Yourself In Peaceful Sounds"
+            </p>
 
             <div className="grid md:grid-cols-3 gap-4">
               {relaxingSounds.map((sound, index) => (
@@ -141,7 +165,9 @@ export default function MentalActivities() {
                                 />
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="text-[#314328] font-medium">{sound.label}</span>
+                                <span className="text-[#314328] font-medium">
+                                  {sound.label}
+                                </span>
                               </div>
                             </div>
                           </DialogTrigger>
@@ -190,7 +216,10 @@ export default function MentalActivities() {
                       </Card>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Click to watch video, Click play button to listen to sound</p>
+                      <p>
+                        Click to watch video, Click play button to listen to
+                        sound
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -200,8 +229,12 @@ export default function MentalActivities() {
 
           {/* Games Section */}
           <Card className="p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-2xl font-medium text-[#314328] mb-4">Games For Relaxation</h2>
-            <p className="text-gray-600 mb-4">"Engage Your Brain And Relax With Simple Fun Games"</p>
+            <h2 className="text-2xl font-medium text-[#314328] mb-4">
+              Games For Relaxation
+            </h2>
+            <p className="text-gray-600 mb-4">
+              "Engage Your Brain And Relax With Simple Fun Games"
+            </p>
 
             <div className="grid md:grid-cols-2 gap-6">
               {games.map((game, index) => (
@@ -218,7 +251,9 @@ export default function MentalActivities() {
                               className="object-cover rounded-lg"
                             />
                           </div>
-                          <h3 className="text-center text-[#314328] font-medium">{game.label}</h3>
+                          <h3 className="text-center text-[#314328] font-medium">
+                            {game.label}
+                          </h3>
                         </Card>
                       </TooltipTrigger>
                       <TooltipContent>
