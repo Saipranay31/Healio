@@ -111,7 +111,7 @@ Ensure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Sathwik9418/healio.git
+   git clone https://github.com/Saipranay31/healio.git
    ```
 
 2. Navigate to the project directory:
